@@ -2,41 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Cybersecurity Theme Design System - All colors MUST be HSL */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Cyber Dark Theme */
+    --background: 225 15% 6%;
+    --foreground: 210 15% 90%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 225 15% 8%;
+    --card-foreground: 210 15% 90%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 225 15% 8%;
+    --popover-foreground: 210 15% 90%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Neon Blue Primary */
+    --primary: 200 100% 50%;
+    --primary-foreground: 225 15% 6%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Dark Secondary */
+    --secondary: 225 15% 12%;
+    --secondary-foreground: 210 15% 90%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 225 15% 10%;
+    --muted-foreground: 210 10% 65%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Neon Green Accent */
+    --accent: 150 100% 50%;
+    --accent-foreground: 225 15% 6%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Neon Orange Destructive */
+    --destructive: 15 100% 60%;
+    --destructive-foreground: 210 15% 90%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 225 15% 15%;
+    --input: 225 15% 12%;
+    --ring: 200 100% 50%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Custom Cyber Colors */
+    --cyber-glow: 200 100% 50%;
+    --success-glow: 150 100% 50%;
+    --warning-glow: 30 100% 60%;
+    --danger-glow: 0 100% 60%;
+    
+    /* Gradients */
+    --gradient-cyber: linear-gradient(135deg, hsl(200 100% 50% / 0.1), hsl(150 100% 50% / 0.1));
+    --gradient-primary: linear-gradient(135deg, hsl(200 100% 50%), hsl(200 100% 40%));
+    --gradient-card: linear-gradient(145deg, hsl(225 15% 8%), hsl(225 15% 10%));
+    
+    /* Shadows & Glows */
+    --shadow-cyber: 0 0 20px hsl(200 100% 50% / 0.3);
+    --shadow-success: 0 0 20px hsl(150 100% 50% / 0.3);
+    --shadow-card: 0 8px 32px hsl(225 15% 2% / 0.4);
+    
+    /* Animations */
+    --transition-cyber: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +122,68 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-mono;
+  }
+}
+
+@layer components {
+  /* Cyber Glow Effects */
+  .cyber-glow {
+    box-shadow: var(--shadow-cyber);
+    transition: var(--transition-cyber);
+  }
+  
+  .cyber-glow:hover {
+    box-shadow: 0 0 30px hsl(var(--cyber-glow) / 0.5);
+  }
+  
+  .success-glow {
+    box-shadow: var(--shadow-success);
+  }
+  
+  /* Cyber Gradients */
+  .gradient-cyber {
+    background: var(--gradient-cyber);
+  }
+  
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+  
+  .gradient-card {
+    background: var(--gradient-card);
+  }
+  
+  /* Animated Border Effect */
+  .cyber-border {
+    position: relative;
+    border: 1px solid hsl(var(--border));
+  }
+  
+  .cyber-border::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(45deg, 
+      hsl(var(--cyber-glow) / 0.5), 
+      transparent, 
+      hsl(var(--success-glow) / 0.5)
+    );
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+  }
+  
+  /* Cyber Grid Pattern */
+  .cyber-grid {
+    background-image: 
+      linear-gradient(hsl(var(--cyber-glow) / 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--cyber-glow) / 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
   }
 }

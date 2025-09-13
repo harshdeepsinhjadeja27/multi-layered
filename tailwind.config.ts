@@ -47,6 +47,23 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Custom Cyber Colors
+        cyber: {
+          DEFAULT: "hsl(var(--cyber-glow))",
+          glow: "hsl(var(--cyber-glow))",
+        },
+        success: {
+          DEFAULT: "hsl(var(--success-glow))",
+          glow: "hsl(var(--success-glow))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning-glow))",
+          glow: "hsl(var(--warning-glow))",
+        },
+        danger: {
+          DEFAULT: "hsl(var(--danger-glow))",
+          glow: "hsl(var(--danger-glow))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
