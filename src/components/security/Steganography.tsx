@@ -41,6 +41,7 @@ export const Steganography = ({ inputData = "", mode, onComplete }: Steganograph
 
     const reader = new FileReader();
     reader.onload = (e) => {
+      console.log("Image file loaded, setting state");
       setImage(e.target?.result as string);
       setStep("select");
       setSelectedPoints([]);
@@ -51,10 +52,18 @@ export const Steganography = ({ inputData = "", mode, onComplete }: Steganograph
   };
 
   const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    if (step !== "select" || selectedPoints.length >= 4) return;
+    console.log("Canvas clicked!", { step, selectedPointsLength: selectedPoints.length });
+    
+    if (step !== "select" || selectedPoints.length >= 4) {
+      console.log("Click blocked:", { step, pointsLength: selectedPoints.length });
+      return;
+    }
 
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) {
+      console.log("No canvas ref");
+      return;
+    }
 
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
@@ -62,6 +71,8 @@ export const Steganography = ({ inputData = "", mode, onComplete }: Steganograph
     
     const x = (event.clientX - rect.left) * scaleX;
     const y = (event.clientY - rect.top) * scaleY;
+
+    console.log("Click coordinates:", { x, y, rect, scaleX, scaleY });
 
     const newPoint = { x, y };
     const newPoints = [...selectedPoints, newPoint];
@@ -76,10 +87,18 @@ export const Steganography = ({ inputData = "", mode, onComplete }: Steganograph
   };
 
   const handleDecryptAttempt = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    if (mode !== "decrypt" || step !== "select") return;
+    console.log("Decrypt attempt clicked!", { mode, step, selectedPointsLength: selectedPoints.length });
+    
+    if (mode !== "decrypt" || step !== "select") {
+      console.log("Decrypt click blocked:", { mode, step });
+      return;
+    }
 
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) {
+      console.log("No canvas ref for decrypt");
+      return;
+    }
 
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
@@ -87,6 +106,8 @@ export const Steganography = ({ inputData = "", mode, onComplete }: Steganograph
     
     const x = (event.clientX - rect.left) * scaleX;
     const y = (event.clientY - rect.top) * scaleY;
+
+    console.log("Decrypt click coordinates:", { x, y, rect, scaleX, scaleY });
 
     const newPoint = { x, y };
     const newPoints = [...selectedPoints, newPoint];
@@ -118,13 +139,25 @@ export const Steganography = ({ inputData = "", mode, onComplete }: Steganograph
 
   const drawCanvas = () => {
     const canvas = canvasRef.current;
-    if (!canvas || !image) return;
+    if (!canvas || !image) {
+      console.log("DrawCanvas early return:", { canvas: !!canvas, image: !!image });
+      return;
+    }
 
     const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    if (!ctx) {
+      console.log("No canvas context");
+      return;
+    }
 
     const img = new window.Image();
     img.onload = () => {
+      console.log("Image loaded, drawing canvas:", { 
+        imgWidth: img.width, 
+        imgHeight: img.height, 
+        selectedPointsCount: selectedPoints.length 
+      });
+      
       canvas.width = img.width;
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
@@ -146,10 +179,16 @@ export const Steganography = ({ inputData = "", mode, onComplete }: Steganograph
         ctx.fillText((index + 1).toString(), point.x, point.y + 4);
       });
     };
+    
+    img.onerror = () => {
+      console.log("Failed to load image");
+    };
+    
     img.src = image;
   };
 
   useEffect(() => {
+    console.log("useEffect triggered:", { image: !!image, canvas: !!canvasRef.current, selectedPointsLength: selectedPoints.length });
     if (image && canvasRef.current) {
       drawCanvas();
     }
@@ -303,8 +342,8 @@ export const Steganography = ({ inputData = "", mode, onComplete }: Steganograph
               <canvas
                 ref={canvasRef}
                 onClick={mode === "encrypt" ? handleCanvasClick : handleDecryptAttempt}
-                className="max-w-full h-auto cursor-crosshair"
-                style={{ maxHeight: '400px' }}
+                className="max-w-full h-auto cursor-crosshair block"
+                style={{ maxHeight: '400px', display: 'block' }}
               />
               {selectedPoints.length < 4 && (
                 <div className="absolute top-2 left-2 bg-background/90 px-2 py-1 rounded text-xs">
